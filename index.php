@@ -21,6 +21,7 @@ if (! file_exists("tracks/$track")) {
 }
 
 
+
 // initial zoom
 $xml = simplexml_load_file("tracks/$track");
 $lat = $xml->trk->trkseg->trkpt[count($xml->trk->trkseg->trkpt)-1][lat];
@@ -52,9 +53,7 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 		}
 	}
 }
-
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -89,8 +88,78 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 			height: 100%;
 		}
 
-		select {
-			color: black;
+		a {
+			color: #FFFFFF;
+		}
+
+		.graph-container {
+			box-sizing: border-box;
+			width: 312px;
+			height: 162px;
+			padding: 5px;
+			margin: 15px auto 30px auto;
+			border: 1px solid #ddd;
+			background: #fff;
+			background: linear-gradient(#f6f6f6 0, #fff 50px);
+			box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+		}
+
+		.graph-placeholder {
+			width: 100%;
+			height: 100%;
+			font-size: 14px;
+			line-height: 1.2em;
+		}
+
+		.modal {
+			color: #FFFFFF;
+		}
+
+		.modal-content {
+			border-radius: 1px;
+			background-color: #34495e;
+		}
+
+		.close {
+			color: #FFFFFF;
+		}
+
+		.btn {
+			border-radius: 3px;
+		}
+
+		.statstable {
+			display: table;
+		}
+
+		.statstable div {
+			display: table-row;
+		}
+
+		.statstable div div:first-child {
+			display: table-cell;
+			text-align: right;
+			padding-right: 7px;
+		}
+
+		.statstable div div:last-child {
+			display: table-cell;
+			font-weight: bold;
+		}
+
+		#buttonsforstuff {
+			margin-bottom: 20px;
+		}
+
+		#buttonsforstuff button:last-child {
+			margin-left: 10px;
+		}
+
+		#ajaxloaderonupload {
+			float: right;
+			border: 3px solid white;
+			border-radius: 3px;
+			background-color:white;
 		}
 
 		#slidx-menu { 
@@ -112,50 +181,6 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 		#fileSelectForm {
 			margin-right: 6px;
 		}
-
-		.graph-container {
-			box-sizing: border-box;
-			width: 312px;
-			height: 162px;
-			padding: 5px;
-			margin: 15px auto 30px auto;
-			border: 1px solid #ddd;
-			background: #fff;
-			background: linear-gradient(#f6f6f6 0, #fff 50px);
-			background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
-			background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
-			background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
-			background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
-			box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-			-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-			-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-			-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-			-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-		}
-
-		.graph-placeholder {
-			width: 100%;
-			height: 100%;
-			font-size: 14px;
-			line-height: 1.2em;
-		}
-
-		.modal {
-			color: #FFFFFF;
-		}
-
-		.modal-content {
-			border-radius: 1px;
-			background-color: #34495e;
-		}
-
-		.close {
-			color: white;
-		}
-
-		.btn {
-			border-radius: 3px;
-		}
 	</style>
 </head>
 
@@ -171,30 +196,30 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 	<div class="content">
 	<h2><span class="trackName"><?php echo $track; ?></span></h2>
 
-		<div style="display: table;">
-			<div style="display: table-row;">
-				<div style="display: table-cell; text-align: right; padding-right: 7px;">Distanz:</div>
-				<div style="display: table-cell; font-weight: bold;"><span class="distance"></span> m</div>
+		<div class="statstable">
+			<div>
+				<div>Distanz:</div>
+				<div><span class="distance"></span> m</div>
 			</div>
-			<div style="display: table-row;">
-				<div style="display: table-cell; text-align: right; padding-right: 7px;">Start:</div>
-				<div style="display: table-cell; font-weight: bold;"><span class="start"></span> Uhr</div>
+			<div>
+				<div>Start:</div>
+				<div><span class="start"></span> Uhr</div>
 			</div>
-			<div style="display: table-row;">
-				<div style="display: table-cell; text-align: right; padding-right: 7px;">Ende:</div>
-				<div style="display: table-cell; font-weight: bold;"><span class="end"></span> Uhr</div>
+			<div>
+				<div>Ende:</div>
+				<div><span class="end"></span> Uhr</div>
 			</div>
-			<div style="display: table-row;">
-				<div style="display: table-cell; text-align: right; padding-right: 7px;">Dauer:</div>
-				<div style="display: table-cell; font-weight: bold;"><span class="duration"></span> h</div>
+			<div>
+				<div>Dauer:</div>
+				<div><span class="duration"></span> h</div>
 			</div>
-			<div style="display: table-row;">
-				<div style="display: table-cell; text-align: right; padding-right: 7px;">Geschwindigkeit:</div>
-				<div style="display: table-cell; font-weight: bold;"><span class="speed"></span> km/h</div>
+			<div>
+				<div>Geschwindigkeit:</div>
+				<div><span class="speed"></span> km/h</div>
 			</div>
-			<div style="display: table-row;">
-				<div style="display: table-cell; text-align: right; padding-right: 7px;">Download:</div>
-				<div style="display: table-cell; font-weight: bold;"><a href="tracks/<?php echo $track; ?>" target="_blank" style="color: #FFFFFF;">GPX</a></div>
+			<div>
+				<div>Download:</div>
+				<div><a href="tracks/<?php echo $track; ?>" target="_blank">GPX</a></div>
 			</div>
 		</div>
 
@@ -244,12 +269,12 @@ for($i=0;$i<$anz;$i++) {
 
 		<br />
 
-		<div id="buttonsforstuff" style="margin-bottom: 20px;">
+		<div id="buttonsforstuff">
 			<button id="uploadbutton" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal-upload">
 				Upload
 			</button>
 
-			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" style="margin-left: 10px;">
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
 				&Uuml;ber
 			</button>
 		</div>
@@ -273,20 +298,20 @@ for($i=0;$i<$anz;$i++) {
 			</div>
 			<div class="modal-body">
 				<a href="http://www.wtfpl.net/" target="_blank"><img src="img/wtfpl.png" alt="WTFPL" class="pull-right"/></a>
-				<p>Idee und Umsetzung 2015 von <a href="https://blog.pregos.info/" style="color: white;">Jan Vonde</a></p>
+				<p>Idee und Umsetzung 2015 von <a href="https://blog.pregos.info/" target="_blank">Jan Vonde</a></p>
 
 				<p>Verwendete Projekte / Seiten</p>
 				<ul>
-					<li><a href="http://leafletjs.com/" target="_blank" style="color: white">Leaflet</a></li>
-					<li><a href="https://github.com/mpetazzoni/leaflet-gpx" target="_blank" style="color: white">GPX plugin for Leaflet</a></li>
-					<li><a href="http://momentjs.com/" target="_blank" style="color: white">Moment.js</a></li>
-					<li><a href="http://www.flotcharts.org/" target="_blank" style="color: white">Flot</a></li>
-					<li><a href="http://getbootstrap.com/" target="_blank" style="color: white">Bootstrap</a></li>
-					<li><a href="http://www.mapbox.com/" target="_blank" style="color: white">Mapbox</a></li>
-					<li><a href="http://www.jqueryscript.net/menu/Super-Simple-jQuery-Sidebar-Sliding-Menu-Plugin-Slidx.html" target="_blank" style="color:white;">Slidx</a></li>
-					<li><a href="https://www.iconfinder.com/icons/211081/gps_landmark_location_map_marker_navigation_pin_icon" target="_blank" style="color:white;">GPS Icon / Two Tone Design Set</a></li>
-					<li><a href="http://wp.misterunknown.de/blog/2013/11/fileupload-per-ajax.html" target="_blank" style="color:white;">Fileupload per AJAX</li>
-					<li><a href="http://ajaxload.info/" target="_blank" style="color:white;">Ajaxload.info</a></li>
+					<li><a href="http://leafletjs.com/" target="_blank">Leaflet</a></li>
+					<li><a href="https://github.com/mpetazzoni/leaflet-gpx" target="_blank">GPX plugin for Leaflet</a></li>
+					<li><a href="http://momentjs.com/" target="_blank">Moment.js</a></li>
+					<li><a href="http://www.flotcharts.org/" target="_blank">Flot</a></li>
+					<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>
+					<li><a href="http://www.mapbox.com/" target="_blank">Mapbox</a></li>
+					<li><a href="http://www.jqueryscript.net/menu/Super-Simple-jQuery-Sidebar-Sliding-Menu-Plugin-Slidx.html" target="_blank">Slidx</a></li>
+					<li><a href="https://www.iconfinder.com/icons/211081/gps_landmark_location_map_marker_navigation_pin_icon" target="_blank">GPS Icon / Two Tone Design Set</a></li>
+					<li><a href="http://wp.misterunknown.de/blog/2013/11/fileupload-per-ajax.html" target="_blank">Fileupload per AJAX</li>
+					<li><a href="http://ajaxload.info/" target="_blank">Ajaxload.info</a></li>
 				</ul>
 			</div>
 			<div class="modal-footer">
@@ -308,7 +333,7 @@ for($i=0;$i<$anz;$i++) {
 				<h4 class="modal-title" id="myModalLabel-upload">Upload</h4>
 			</div>
 			<div class="modal-body">
-				<div id='loadingmessage' style='display:none; float:right; border:3px solid white; border-radius: 3px; background-color:white;'>
+				<div id='ajaxloaderonupload' style='display: none;'>
 					<img src='img/ajax-loader.gif' alt="loading..."/>
 				</div>
 				<input type="file" id="uploadFile">
@@ -394,7 +419,7 @@ if ($hideSpeed == 0) {
 <!-- UPLOAD TRACKS -->
 <script type="text/javascript">
 	$('body').on('change', '#uploadFile', function() {
-		$('#loadingmessage').show();
+		$('#ajaxloaderonupload').show();
 		var data = new FormData();
 		data.append('file', this.files[0]);
 		$.ajax({
@@ -405,7 +430,7 @@ if ($hideSpeed == 0) {
 			contentType: false,
 			dataType: "json",
 			success: function(response) { 
-				$('#loadingmessage').hide();
+				$('#ajaxloaderonupload').hide();
 				$('#uploadFile').hide();
 				if (response.status == "OK") {
 					$('#closeUpload').addClass('reload');
