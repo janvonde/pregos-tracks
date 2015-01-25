@@ -310,7 +310,7 @@ for($i=0;$i<$anz;$i++) {
 					<li><a href="http://www.mapbox.com/" target="_blank">Mapbox</a></li>
 					<li><a href="http://www.jqueryscript.net/menu/Super-Simple-jQuery-Sidebar-Sliding-Menu-Plugin-Slidx.html" target="_blank">Slidx</a></li>
 					<li><a href="https://www.iconfinder.com/icons/211081/gps_landmark_location_map_marker_navigation_pin_icon" target="_blank">GPS Icon / Two Tone Design Set</a></li>
-					<li><a href="http://wp.misterunknown.de/blog/2013/11/fileupload-per-ajax.html" target="_blank">Fileupload per AJAX</li>
+					<li><a href="http://wp.misterunknown.de/blog/2013/11/fileupload-per-ajax.html" target="_blank">Fileupload per AJAX</a></li>
 					<li><a href="http://ajaxload.info/" target="_blank">Ajaxload.info</a></li>
 				</ul>
 			</div>
