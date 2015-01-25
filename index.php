@@ -176,6 +176,7 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 			padding: 10px 30px;
 			border-radius: 3px;
 			margin: 20px 20px 0px 0px;
+			font-weight: bold;
 		}
 
 		#fileSelectForm {
@@ -190,7 +191,7 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 
 
 <!-- SIDEBAR -->
-<a id="slidx-button" class="btn btn-default btn-lg"><b>Info</b></a>
+<a id="slidx-button" class="btn btn-default btn-lg">Info</a>
 
 <div id="slidx-menu">
 	<div class="content">
@@ -378,16 +379,19 @@ if ($hideSpeed == 0) {
 			attributionControl: false
 			});
 	
+		var gpx = 'tracks/<?php echo $track; ?>';
+
+
 		function _c(c) { return elt.getElementsByClassName(c)[0]; }
-	
+
+
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={access_token}', {
 			maxZoom: 18,
-				id: '<?php echo $mapboxId; ?>',
-				access_token: '<?php echo $mapboxAccessToken; ?>'
+			id: '<?php echo $mapboxId; ?>',
+			access_token: '<?php echo $mapboxAccessToken; ?>'
 	
 		}).addTo(map);
 	
-		var gpx = 'tracks/<?php echo $track; ?>';
 		new L.GPX(gpx, {
 			async: true,
 			marker_options: {
@@ -397,7 +401,7 @@ if ($hideSpeed == 0) {
 			}
 		}).on('loaded', function(e) {
 			map.fitBounds(e.target.getBounds());
-		}).on('loaded', function(e) {
+
 			var gpx = e.target;
 			_c('distance').textContent = Math.round(gpx.get_distance());
 			_c('duration').textContent = moment.utc(gpx.get_total_time()).format('HH:mm:ss');
