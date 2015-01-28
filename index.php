@@ -21,6 +21,28 @@ if (! file_exists("tracks/$track")) {
 }
 
 
+// oembed FTW
+if (isset($_GET['action']) && $_GET['action'] == "oembed") {
+	if (!isset($_GET['url']) || $_GET['url'] == "") {
+		echo "Missing parameter: url";
+		exit;
+	}
+
+	$response = array("author_name" => "Jan Vonde",
+			  "author_url" => "http://blog.pregos.info",
+			  "cache_age" => "86400",
+			  "html" => "<iframe width='620' height='349' src='" . str_replace('index.php', 'embed.php', curPageURL()) . "?file=$track' class='pregoTrack' frameborder='0'></iframe>",
+			  "provider_name" => "pregos tracks",
+			  "provider_url" => "http://github.com/janvonde/pregos-tracks",
+			  "title" => "$track",
+			  "type" => "rich",
+			  "version" =>"1.0");
+
+	header('Content-Type: application/json');
+	echo json_encode($response);
+	exit;
+}
+
 
 // initial zoom
 $xml = simplexml_load_file("tracks/$track");
@@ -35,6 +57,7 @@ foreach($xml->trk->trkseg->trkpt as $trkpt) {
 	$allEles[] = array($i,$trkpt->ele->__toString());
 	$i++;
 }
+
 
 // speed graph
 $hideSpeed = 1;
@@ -53,6 +76,19 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 		}
 	}
 }
+
+
+
+// determine page url for oembed
+function curPageURL() {
+	$isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
+	$port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
+	$port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
+	$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+	$url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$uri_parts[0];
+	return $url;
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,6 +99,8 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 	<meta http-equiv="refresh" content="600">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+
+	<link rel="alternate" type="application/json+oembed" href="<?php echo curPageURL(); ?>?action=oembed&url=<?php echo urlencode(curPageURL()) . "&file=" . $track; ?>" title="pregos tracks - <?php echo $track; ?>" />
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" />
@@ -88,7 +126,7 @@ if (isset($xml->trk->trkseg->trkpt->extensions)) {
 			height: 100%;
 		}
 
-		a {
+		a, a:hover {
 			color: #FFFFFF;
 		}
 
@@ -309,10 +347,12 @@ for($i=0;$i<$anz;$i++) {
 					<li><a href="http://www.flotcharts.org/" target="_blank">Flot</a></li>
 					<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>
 					<li><a href="http://www.mapbox.com/" target="_blank">Mapbox</a></li>
+					<li><a href="http://www.oembed.com/" target="_blank">oEmbed</a></li>
 					<li><a href="http://www.jqueryscript.net/menu/Super-Simple-jQuery-Sidebar-Sliding-Menu-Plugin-Slidx.html" target="_blank">Slidx</a></li>
 					<li><a href="https://www.iconfinder.com/icons/211081/gps_landmark_location_map_marker_navigation_pin_icon" target="_blank">GPS Icon / Two Tone Design Set</a></li>
 					<li><a href="http://wp.misterunknown.de/blog/2013/11/fileupload-per-ajax.html" target="_blank">Fileupload per AJAX</a></li>
 					<li><a href="http://ajaxload.info/" target="_blank">Ajaxload.info</a></li>
+					<li><a href="http://webcheatsheet.com/php/get_current_page_url.php" target="_blank">Get current page URL in php</a></li>
 				</ul>
 			</div>
 			<div class="modal-footer">
