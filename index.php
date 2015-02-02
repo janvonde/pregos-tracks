@@ -28,6 +28,10 @@ if (isset($_GET['action']) && $_GET['action'] == "oembed") {
 		exit;
 	}
 
+    // get the file name from the url
+    parse_str(parse_url($_GET['url'], PHP_URL_QUERY), $query);
+    $track = $query["file"];
+
 	$response = array("author_name" => "Jan Vonde",
 			  "author_url" => "http://blog.pregos.info",
 			  "cache_age" => "86400",
