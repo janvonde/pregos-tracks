@@ -31,11 +31,21 @@ if (isset($_GET['action']) && $_GET['action'] == "oembed") {
     // get the file name from the url
     parse_str(parse_url($_GET['url'], PHP_URL_QUERY), $query);
     $track = $query["file"];
+    
+    // Retrieve max width and height
+    $maxwidth = isset($_GET['maxwidth']) ? intval($_GET['maxwidth']) : 0;
+    if($maxwidth == 0) {
+        $maxwidth = 620;
+    }
+    $maxheight = isset($_GET['maxheight']) ? intval($_GET['maxheight']) : 0;
+    if($maxheight == 0) {
+        $maxheight = 349;
+    }
 
 	$response = array("author_name" => "Jan Vonde",
 			  "author_url" => "http://blog.pregos.info",
 			  "cache_age" => "86400",
-			  "html" => "<iframe width='620' height='349' src='" . str_replace('index.php', 'embed.php', curPageURL()) . "?file=$track' class='pregoTrack' frameborder='0'></iframe>",
+			  "html" => "<iframe width='$maxwidth' height='$maxheight' src='" . str_replace('index.php', 'embed.php', curPageURL()) . "?file=$track' class='pregoTrack' frameborder='0'></iframe>",
 			  "provider_name" => "pregos tracks",
 			  "provider_url" => "http://github.com/janvonde/pregos-tracks",
 			  "title" => "$track",
